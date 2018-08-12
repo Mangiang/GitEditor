@@ -1,0 +1,74 @@
+{
+  "runtimeTarget": {
+    "name": ".NETStandard,Version=v2.0/",
+    "signature": "e578a312bc004bf8a1f10ebdea75bfd8c8a32c36"
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETStandard,Version=v2.0": {},
+    ".NETStandard,Version=v2.0/": {
+      "LibGit2Sharp/0.25.2-g": {
+        "dependencies": {
+          "LibGit2Sharp.NativeBinaries": "1.0.217",
+          "NETStandard.Library": "2.0.3",
+          "Nerdbank.GitVersioning": "2.1.23",
+          "SourceLink.Create.GitHub": "2.8.0"
+        },
+        "runtime": {
+          "LibGit2Sharp.dll": {}
+        }
+      },
+      "LibGit2Sharp.NativeBinaries/1.0.217": {},
+      "Microsoft.NETCore.Platforms/1.1.0": {},
+      "Nerdbank.GitVersioning/2.1.23": {},
+      "NETStandard.Library/2.0.3": {
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "1.1.0"
+        }
+      },
+      "SourceLink.Create.GitHub/2.8.0": {}
+    }
+  },
+  "libraries": {
+    "LibGit2Sharp/0.25.2-g": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "LibGit2Sharp.NativeBinaries/1.0.217": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-fPG2+nyEgT5GIwj6x22CrB6z0/gVD08TERqCKtzGyaIoIimIvty0hGPVhzyCU73BX6L462e00GN41JD9nHwniA==",
+      "path": "libgit2sharp.nativebinaries/1.0.217",
+      "hashPath": "libgit2sharp.nativebinaries.1.0.217.nupkg.sha512"
+    },
+    "Microsoft.NETCore.Platforms/1.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-kz0PEW2lhqygehI/d6XsPCQzD7ff7gUJaVGPVETX611eadGsA3A877GdSlU0LRVMCTH/+P3o2iDTak+S08V2+A==",
+      "path": "microsoft.netcore.platforms/1.1.0",
+      "hashPath": "microsoft.netcore.platforms.1.1.0.nupkg.sha512"
+    },
+    "Nerdbank.GitVersioning/2.1.23": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ZeOctZXGn1Cerb3FBlTxHpKIxlmbm5HFw5D+mj57b1gA72SUo5LyfEr/G9J0DHO+2DbHyzfonU8z1ubqz4Aw+g==",
+      "path": "nerdbank.gitversioning/2.1.23",
+      "hashPath": "nerdbank.gitversioning.2.1.23.nupkg.sha512"
+    },
+    "NETStandard.Library/2.0.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-st47PosZSHrjECdjeIzZQbzivYBJFv6P2nv4cj2ypdI204DO+vZ7l5raGMiX4eXMJ53RfOIg+/s4DHVZ54Nu2A==",
+      "path": "netstandard.library/2.0.3",
+      "hashPath": "netstandard.library.2.0.3.nupkg.sha512"
+    },
+    "SourceLink.Create.GitHub/2.8.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-1pIz6/JT2M8tjoqDOoA6eJ1P7+iXkxAbv4biGHNLSO4LpoQCIq6TpAUNcG0yJ2por0lrCFUKjpsoge68OexqPg==",
+      "path": "sourcelink.create.github/2.8.0",
+      "hashPath": "sourcelink.create.github.2.8.0.nupkg.sha512"
+    }
+  }
+}
