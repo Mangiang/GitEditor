@@ -5,6 +5,7 @@ using UnityEditor.Callbacks;
 using GitEditor.DataAccess;
 using GitEditor.Tree;
 using GitEditor.Windows.Tabs;
+using System.Threading;
 
 /// <summary>
 /// The namespace used for windows.
@@ -43,7 +44,7 @@ namespace GitEditor.Windows
         /// Is the window initialized ?
         /// </summary>
         [SerializeField] bool isInitialized;
-
+        [SerializeField] float initializationProgress;
         /// <summary>
         /// The password asking window.
         /// </summary>
@@ -65,6 +66,11 @@ namespace GitEditor.Windows
         /// The display methods for each tab.
         /// </summary>
         public List<DisplayableTab> displays = new List<DisplayableTab>();
+
+        Thread CommitInitThread;
+        Thread HistoryInitThread;
+        Thread BranchesInitThread;
+        Thread SettingsInitThread;
 
         #region Tabs
         /// <summary>
@@ -88,22 +94,23 @@ namespace GitEditor.Windows
         void OnEnable()
         {
             RepositoryManager.Init(".");
+            isInitialized = false;
 
             #region /////// Tabs initialization ///////
             toolbarStrings = new List<string>();
+            initializationProgress = 0;
             commitTab = new CommitTab("Commit", this);
-            historyTab = new HistoryTab("History", this);
-            branchesTab = new BranchesTab("Branches", this);
-            settingsTab = new SettingsTab("Settings", this);
-
             displays.Add(commitTab);
-            displays.Add(historyTab);
-            displays.Add(branchesTab);
-            displays.Add(settingsTab);
+            toolbarStrings.Add(commitTab.GetName());
+            initializationProgress += 25;
 
-            displays.ForEach((DisplayableTab tab) => {
-                toolbarStrings.Add(tab.GetName());
-            });
+            HistoryInitThread = new Thread(InitHistory);
+            BranchesInitThread = new Thread(InitBranches);
+            SettingsInitThread = new Thread(InitSettings);
+
+            HistoryInitThread.Start();
+            BranchesInitThread.Start();
+            SettingsInitThread.Start();
             #endregion
 
             passwordWindow = new PasswordAsk();
@@ -111,10 +118,45 @@ namespace GitEditor.Windows
 
         }
 
+        void InitHistory()
+        {
+            historyTab = new HistoryTab("History", this);
+            displays.Add(historyTab);
+            toolbarStrings.Add(historyTab.GetName());
+            initializationProgress += 25;
+        }
+        void InitBranches()
+        {
+            branchesTab = new BranchesTab("Branches", this);
+            displays.Add(branchesTab);
+            toolbarStrings.Add(branchesTab.GetName());
+            initializationProgress += 25;
+        }
+        void InitSettings()
+        {
+            settingsTab = new SettingsTab("Settings", this);
+            displays.Add(settingsTab);
+            toolbarStrings.Add(settingsTab.GetName());
+            initializationProgress += 25;
+        }
+
         void OnGUI()
         {
-            toolbarIdx = GUILayout.Toolbar(toolbarIdx, toolbarStrings.ToArray());
-            displays[toolbarIdx].Display();
+            if (Event.current.type == EventType.Layout)
+            {
+                if (initializationProgress == 100)
+                    isInitialized = true;
+            }
+            if (isInitialized)
+            {
+                    EditorUtility.ClearProgressBar();
+                toolbarIdx = GUILayout.Toolbar(toolbarIdx, toolbarStrings.ToArray());
+                displays[toolbarIdx].Display();
+            }
+            else
+            {
+                EditorUtility.DisplayProgressBar("Initialization", "Initialization ...", initializationProgress);
+            }
         }
 
         #region ///// Getters/Setters ////
