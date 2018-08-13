@@ -201,7 +201,7 @@ namespace GitEditor.Windows.Tabs
                 if (currentPage > 0)
                     currentPage--;
             }
-            GUILayout.Label(string.Format("{0}/{1}", currentPage + 1, maxPage));
+            GUILayout.Label(string.Format("{0}/{1}", currentPage + 1, maxPage + 1));
             if (GUILayout.Button("Next page"))
             {
                 if (currentPage < maxPage - 1)
