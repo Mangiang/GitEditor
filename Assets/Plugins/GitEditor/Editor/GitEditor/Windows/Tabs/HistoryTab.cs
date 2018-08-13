@@ -18,19 +18,27 @@ namespace GitEditor.Windows.Tabs
         /// <summary>
         /// The list of HistoryCommit.
         /// </summary>
-        [SerializeField] List<HistoryCommit> historyCommits;
+        [SerializeField] private List<HistoryCommit> historyCommits;
         /// <summary>
         /// Is the current local HEAD ahead of remote ?
         /// </summary>
-        [SerializeField] string aheadBy;
+        [SerializeField] private string aheadBy;
         /// <summary>
         /// Is the current local HEAD behind remote ?
         /// </summary>
-        [SerializeField] string behindBy;
+        [SerializeField] private string behindBy;
         /// <summary>
         /// The history scroll position.
         /// </summary>
-        [SerializeField] Vector2 historyScrollPos;
+        [SerializeField] private Vector2 historyScrollPos;
+        /// <summary>
+        /// The current history page.
+        /// </summary>
+        [SerializeField] private int currentPage;
+        /// <summary>
+        /// The maximum history page.
+        /// </summary>
+        [SerializeField] private int maxPage;
 
         /// <summary>
         /// The constructor.
@@ -88,7 +96,6 @@ namespace GitEditor.Windows.Tabs
             GUILayout.EndHorizontal();
             #endregion
 
-            historyScrollPos = GUILayout.BeginScrollView(historyScrollPos, false, true);
 
             /// Compute the total height of the scroll view
             float height = 0;
@@ -98,11 +105,14 @@ namespace GitEditor.Windows.Tabs
                 height += 70 + (elt.changes.Count + 2 + (elt.onlyLocal || elt.onlyRemote ? 1 : 0)) * EditorGUIUtility.singleLineHeight * 1.5f;
             });
 
+            historyScrollPos = GUILayout.BeginScrollView(historyScrollPos, false, true);
             #region ////// Display the scroll view
             GUI.BeginGroup(new Rect(0, 5, editorWindow.position.width - 15, height));
             string currentCommitID = editorWindow.GetCommitTab().GetCurrentCommitID();
-            foreach (HistoryCommit com in historyCommits)
+            int historyCommitsCount = historyCommits.Count;
+            for (int commitIdx = currentPage*10; commitIdx < (currentPage +1)*10 && commitIdx < historyCommitsCount; commitIdx++)
             {
+                HistoryCommit com = historyCommits[commitIdx];
                 if (com.onlyLocal)
                 {
                     GUI.backgroundColor = Color.green;
@@ -182,8 +192,23 @@ namespace GitEditor.Windows.Tabs
             }
             GUI.EndGroup();
             #endregion
-
             GUILayout.EndScrollView();
+
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            if (GUILayout.Button("Prev page"))
+            {
+                if (currentPage > 0)
+                    currentPage--;
+            }
+            GUILayout.Label(string.Format("{0}/{1}", currentPage + 1, maxPage));
+            if (GUILayout.Button("Next page"))
+            {
+                if (currentPage < maxPage - 1)
+                    currentPage++;
+            }
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
         }
 
         /// <summary>
@@ -235,6 +260,9 @@ namespace GitEditor.Windows.Tabs
 
                 historyCommits.Add(histoCommit);
             }
+
+            currentPage = 0;
+            maxPage = Mathf.CeilToInt(historyCommits.Count / 10);
         }
 
         #region ///// Getters/Setters ////
